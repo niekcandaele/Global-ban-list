@@ -12,7 +12,7 @@ class Ban extends Model
      * @var array
      */
     protected $fillable = [
-        'bannedUntil', 'status', 'deletedAt', 'verified'
+        'bannedUntil', 'status', 'deletedAt', 'verified', 'player', 'bannedBy', 'game', 'reason',
     ];
 
     public function deletedBy()
@@ -22,26 +22,21 @@ class Ban extends Model
 
     public function bannedBy()
     {
-        return $this->belongsTo('App\User', 'bannedById');
-    }
-
-    public function server()
-    {
-        return $this->belongsTo('App\Server', 'ServerId');
+        return $this->belongsTo('App\User', 'bannedBy');
     }
 
     public function player()
     {
-        return $this->belongsTo('App\Player', 'PlayerId');
+        return $this->belongsTo('App\Player', 'player');
     }
 
     public function reason()
     {
-        return $this->belongsTo('App\Reason', 'ReasonId');
+        return $this->belongsTo('App\Reason', 'reason');
     }
 
     public function game()
     {
-        return $this->belongsTo('App\Game', 'GameId');
+        return $this->belongsTo('App\Game', 'game');
     }
 }

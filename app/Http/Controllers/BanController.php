@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Ban;
+use App\Game;
+use App\Player;
+use App\Reason;
+use Illuminate\Http\Request;
+use Validator;
 
 class BanController extends Controller
 {
@@ -13,7 +17,6 @@ class BanController extends Controller
         return Ban::find($id);
     }
 
-
     public function getall()
     {
         return Ban::all();
@@ -21,10 +24,36 @@ class BanController extends Controller
 
     public function store(Request $request)
     {
-        return Ban::create([
-            'bannedUntil' => $request->get('bannedUntil'),
-            'status' => $request->get('status'),
-            'verified' => false,
+        $response = array('response' => '', 'success' => false);
+        $validator = Validator::make($request->all(), [
+            'bannedUntil' => 'required|after:today',
+            'bannedBy' => 'required|exists:users,id',
+            'server' => 'required',
+            'player' => 'required|regex:/^[0-9]{17}$/m',
+            'reason' => 'required|exists:reasons,reasonShort',
+            'game' => 'required|exists:games,code',
         ]);
+        if ($validator->fails()) {
+            $response['response'] = $validator->messages();
+        } else {
+
+            $player = Player::firstOrCreate(['steamId' => $request->get('player')]);
+
+            $reason = Reason::where('reasonShort', $request->get('reason'))->first();
+            $game = Game::where('code', $request->get('game'))->first();
+
+            $createdBan = Ban::create([
+                'bannedUntil' => $request->get('bannedUntil'),
+                'bannedBy' => $request->get('bannedBy'),
+                'verified' => false,
+                'player' => $player['id'],
+                'game' => $game['id'],
+                'reason' => $reason['id'],
+            ]);
+
+            $response['success'] = true;
+        }
+        return $response;
+
     }
 }
