@@ -24,7 +24,7 @@ class CreateBansTable extends Migration
             $table->bigInteger('bannedBy')->unsigned();
             $table->bigInteger('game')->unsigned();
             $table->bigInteger('reason')->unsigned();
-
+            $table->longText('proof');
         });
 
         Schema::table('bans', function ($table) {

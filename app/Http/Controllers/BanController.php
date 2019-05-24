@@ -32,6 +32,7 @@ class BanController extends Controller
             'player' => 'required|regex:/^[0-9]{17}$/m',
             'reason' => 'required|exists:reasons,reasonShort',
             'game' => 'required|exists:games,code',
+            'proof' => 'required|string',
         ]);
         if ($validator->fails()) {
             $response['response'] = $validator->messages();
@@ -46,6 +47,7 @@ class BanController extends Controller
                 'bannedUntil' => $request->get('bannedUntil'),
                 'bannedBy' => $request->get('bannedBy'),
                 'verified' => false,
+                'proof' => $request->get('proof'),
                 'player' => $player['id'],
                 'game' => $game['id'],
                 'reason' => $reason['id'],

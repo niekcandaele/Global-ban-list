@@ -12,7 +12,7 @@ class Ban extends Model
      * @var array
      */
     protected $fillable = [
-        'bannedUntil', 'status', 'deletedAt', 'verified', 'player', 'bannedBy', 'game', 'reason',
+        'bannedUntil', 'status', 'deletedAt', 'verified', 'player', 'bannedBy', 'game', 'reason', 'proof',
     ];
 
     public function deletedBy()
