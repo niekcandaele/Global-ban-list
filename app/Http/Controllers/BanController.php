@@ -12,12 +12,19 @@ use Validator;
 class BanController extends Controller
 {
 
+    public function delete($id)
+    {
+        Ban::destroy($id);
+        $response['success'] = true;
+        return $response;
+    }
+
     public function show($id)
     {
         return Ban::find($id);
     }
 
-    public function getall()
+    public function getAll()
     {
         return Ban::all();
     }
@@ -28,7 +35,6 @@ class BanController extends Controller
         $validator = Validator::make($request->all(), [
             'bannedUntil' => 'required|after:today',
             'bannedBy' => 'required|exists:users,id',
-            'server' => 'required',
             'player' => 'required|regex:/^[0-9]{17}$/m',
             'reason' => 'required|exists:reasons,reasonShort',
             'game' => 'required|exists:games,code',
