@@ -21,7 +21,7 @@ class BanController extends Controller
 
     public function show($id)
     {
-        return Ban::find($id);
+        return Ban::with('player', 'game', 'reason', 'bannedBy')->find($id);
     }
 
     public function getAll()
@@ -41,7 +41,8 @@ class BanController extends Controller
             'proof' => 'required|string',
         ]);
         if ($validator->fails()) {
-            $response['response'] = $validator->messages();
+            $response['problems'] = $validator->messages();
+            return response($response, 400);
         } else {
 
             $player = Player::firstOrCreate(['steamId' => $request->get('player')]);
@@ -60,6 +61,7 @@ class BanController extends Controller
             ]);
 
             $response['success'] = true;
+            $response['ban'] = $createdBan;
         }
         return $response;
 

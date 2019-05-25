@@ -24,3 +24,6 @@ Route::delete('/ban/{id}', 'BanController@delete');
 
 Route::get('/games', 'GameController@getAll');
 Route::get('/reasons', 'ReasonController@getAll');
+
+Route::get('/player/{id}', 'PlayerController@find');
+Route::get('/search/{id}', 'PlayerController@findBySteam');

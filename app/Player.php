@@ -12,11 +12,16 @@ class Player extends Model
      * @var array
      */
     protected $fillable = [
-        'steamId', 'username'
+        'steamId', 'username',
     ];
 
     public function user()
     {
         return $this->belongsTo('App\User', 'UserId');
+    }
+
+    public function bans()
+    {
+        return $this->hasMany('App\Ban', 'player');
     }
 }
